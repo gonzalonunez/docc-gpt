@@ -1,7 +1,6 @@
 import argparse
 import openai
 import os
-import subprocess
 
 arg_parser = argparse.ArgumentParser()
 arg_parser.add_argument('dir', help="The folder whose contents you want to document")
