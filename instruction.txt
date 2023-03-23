@@ -1,29 +1,27 @@
-Write Swift-flavored markdown comments to document the following code. Please do not modify the original code in any way other than by adding Swift-flavored markdown comments. I will share an example with you.
+Add Swift-flavored markdown comments.
 
-Code:
-```swift
+Here is an example. For this code:
+
 struct User: Codable {
-	let email: String
+  let email: String
   let password: String
   let firstName: String
   let lastName: String
 }
-```
 
-Documented:
-```swift
+You should do this:
+
 /// A `struct` representing a user
 struct User: Codable {
   /// The user's email
   let email: String
-  
+
   /// The user's password
   let password: String
-  
+
   /// The user's first name
   let firstName: String
-  
+
   /// The user's last name
   let lastName: String
 }
-```

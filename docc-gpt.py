@@ -4,9 +4,8 @@ import os
 import subprocess
 
 arg_parser = argparse.ArgumentParser()
-arg_parser.add_argument('package', help="The folder containing your Swift Package")
+arg_parser.add_argument('dir', help="The folder whose contents you want to document")
 arg_parser.add_argument('-k', '--key', help="Your secret API key for OpenAI")
-arg_parser.add_argument('-m', '--model', default="code-davinci-002", help="The OpenAI model to use")
 
 args = arg_parser.parse_args()
 openai.api_key = args.key
@@ -15,33 +14,17 @@ ignored_files = [
     "Package.swift",
 ]
 
-def generate_prompt(file):
-    initial_prompt = open("prompt.txt", "r").read()
-    file_contents = file.read()
-    return f"""
-    {initial_prompt}
-
-    Code:
-    ```swift
-    {file_contents}
-    ```
-
-    Documented:
-    ```swift
-    
-    """
-
 def document_file(file_path):
     file = open(file_path, "r+")
-    prompt = generate_prompt(file)
-    max_tokens = 2048-len(prompt)
-    completion = openai.Completion.create(
-        max_tokens=max_tokens,
-        model=args.model, 
-        prompt=prompt,
-        stop=["```"])
+    instruction_file = open("instruction.txt", "r")
+    response = openai.Edit.create(
+        model="code-davinci-edit-001",
+        input=file.read(),
+        instruction=instruction_file.read(),
+        temperature=0,
+        top_p=1)
 
-    response_text = completion.choices[0].text
+    response_text = response.choices[0].text
     file.seek(0)
     file.write(response_text)
     file.close()
@@ -53,7 +36,6 @@ def document_files(directory):
                 absolute_path = os.path.join(root, file)
                 document_file(absolute_path)
 
-document_files(args.package)
-
+document_files(args.dir)
 subprocess.run(f"git diff", shell=True)
-subprocess.run(f"git restore {args.package}", shell=True)
+subprocess.run(f"git restore {args.dir}", shell=True)
