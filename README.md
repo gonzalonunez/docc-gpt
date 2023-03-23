@@ -39,7 +39,7 @@ Depending on the model used, it is smart enough to document long and complex Swi
 Run the package and give it a directory as well as your [OpenAI secret key](https://platform.openai.com/account/api-keys).
 
 > **Warning**
-> DoccGPT will attempt to rewrite the contents of every single `.swift` file in the directory that you feed it!
+> DoccGPT will attempt to rewrite the contents of every single `.swift` file in the directory that you feed it. And if you feed it a sufficiently long file it won't make it all the way to the end!
 
 ```bash
 swift run docc-gpt <directory> --key <key>
