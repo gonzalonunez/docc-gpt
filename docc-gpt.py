@@ -11,6 +11,10 @@ arg_parser.add_argument('-m', '--model', default="code-davinci-002", help="The O
 args = arg_parser.parse_args()
 openai.api_key = args.key
 
+ignored_files = [
+    "Package.swift",
+]
+
 def generate_prompt(file):
     initial_prompt = open("prompt.txt", "r").read()
     file_contents = file.read()
@@ -27,8 +31,8 @@ def generate_prompt(file):
     
     """
 
-def document_file(file):
-    file = open(file, "r+")
+def document_file(file_path):
+    file = open(file_path, "r+")
     prompt = generate_prompt(file)
     max_tokens = 2048-len(prompt)
     completion = openai.Completion.create(
@@ -45,12 +49,11 @@ def document_file(file):
 def document_files(directory):
     for root, dirs, files in os.walk(directory):
         for file in files:
-            if file.endswith(".swift"):
+            if file.endswith(".swift") and file not in ignored_files:
                 absolute_path = os.path.join(root, file)
-                abs_file = open(absolute_path, "r+")
-                document_file(abs_file)
+                document_file(absolute_path)
 
 document_files(args.package)
 
 subprocess.run(f"git diff", shell=True)
-subprocess.run(f"git restore {package_path}", shell=True)
+subprocess.run(f"git restore {args.package}", shell=True)
