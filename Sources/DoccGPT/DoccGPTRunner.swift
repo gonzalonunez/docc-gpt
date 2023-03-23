@@ -1,36 +1,58 @@
 import Foundation
 
+/// A class for running the OpenAI GPT-3 API to document Swift files.
 struct DoccGPTRunner {
 
   // MARK: Internal
 
+  /// The API key used to authenticate with the OpenAI API.
   let apiKey: String
 
+  /**
+   Runs the OpenAI GPT-3 API to document Swift files in a directory.
+
+   - Parameter directoryURL: The URL of the directory containing the Swift files to document.
+
+   - Throws: `DoccGPTRunnerError` if an error occurs.
+   */
   func run(in directoryURL: URL) async throws {
     try await documentFiles(in: directoryURL)
   }
 
   // MARK: Private
 
+  /// The base URL for the OpenAI API.
   private let baseURL = URL(string: "https://api.openai.com/v1/completions")!
+
+  /// The `FileManager` used to access the filesystem.
   private let fileManager = FileManager.default
 
+  /// A set of files to ignore when running the OpenAI API.
   private let ignoredFiles: Set<String> = [
     "Package.swift",
   ]
 
+  /// The `JSONEncoder` used to encode parameters for the OpenAI API.
   private let jsonEncoder: JSONEncoder = {
     let encoder = JSONEncoder()
     encoder.keyEncodingStrategy = .convertToSnakeCase
     return encoder
   }()
 
+  /// The `JSONDecoder` used to decode responses from the OpenAI API.
   private let jsonDecoder: JSONDecoder = {
     let encoder = JSONDecoder()
     encoder.keyDecodingStrategy = .convertFromSnakeCase
     return encoder
   }()
 
+  /**
+   Documents a single Swift file using the OpenAI GPT-3 API.
+
+   - Parameter fileURL: The URL of the file to document.
+
+   - Throws: `DoccGPTRunnerError` if an error occurs.
+   */
   private func documentFile(fileURL: URL) async throws {
     print("᠅ Documenting \(fileURL.lastPathComponent)...")
     defer {
@@ -96,6 +118,13 @@ struct DoccGPTRunner {
      _ = try fileManager.replaceItemAt(fileURL, withItemAt: replacementURL)
   }
 
+  /**
+   Documents files in a directory using the OpenAI GPT-3 API.
+
+   - Parameter directoryURL: The URL of the directory to document.
+
+   - Throws: `DoccGPTRunnerError` if an error occurs.
+   */
   private func documentFiles(in directoryURL: URL) async throws {
     guard let enumerator = fileManager.enumerator(atPath: directoryURL.path) else {
       throw DoccGPTRunnerError.failedToCreateEnumerator
