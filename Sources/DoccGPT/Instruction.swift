@@ -1,3 +1,4 @@
+let instruction = """
 Add Swift-flavored markdown comments.
 
 Here is an example. For this code:
@@ -26,7 +27,7 @@ struct User: Codable {
   let lastName: String
 }
 
-Here is a more complete example. For complicated code, feel free to explain the code in more detail:
+Here is a more complete example. For complicated code, explain the code in more detail:
 
 extension EffectPublisher {
 
@@ -59,3 +60,4 @@ extension EffectPublisher {
     Self.run(priority: priority) { _ in try? await work() }
   }
 }
+"""
