@@ -1,13 +1,12 @@
 import argparse
-import openai
 import os
+import requests
 
 arg_parser = argparse.ArgumentParser()
 arg_parser.add_argument('dir', help="The folder whose contents you want to document")
 arg_parser.add_argument('-k', '--key', help="Your secret API key for OpenAI")
 
 args = arg_parser.parse_args()
-openai.api_key = args.key
 
 ignored_files = [
     "Package.swift",
@@ -16,14 +15,21 @@ ignored_files = [
 def document_file(file_path):
     file = open(file_path, "r+")
     instruction_file = open("instruction.txt", "r")
-    response = openai.Edit.create(
-        model="code-davinci-edit-001",
-        input=file.read(),
-        instruction=instruction_file.read(),
-        temperature=0,
-        top_p=1)
-
-    response_text = response.choices[0].text
+    response = requests.post(
+        'https://api.openai.com/v1/edits', 
+        headers={
+            "Authorization": f"Bearer {args.key}",
+            "Content-Type": "application/json",
+        },
+        json={
+          "model": "code-davinci-edit-001",
+          "input": file.read(),
+          "instruction": instruction_file.read(),
+          "temperature": 0,
+          "top_p": 1
+        })
+        
+    response_text = response.json()['choices'][0]['text']
     file.seek(0)
     file.write(response_text)
     file.close()
