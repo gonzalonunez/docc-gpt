@@ -3,7 +3,7 @@ import XCTest
 
 final class DoccGPTTests: XCTestCase {
 
-	func testExample() {
-		XCTAssertEqual(1, 1)
-	}
+  func testExample() {
+    XCTAssertEqual(1, 1)
+  }
 }
