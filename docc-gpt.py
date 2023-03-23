@@ -1,5 +1,6 @@
 import argparse
 import openai
+import os
 import subprocess
 
 arg_parser = argparse.ArgumentParser()
@@ -26,7 +27,7 @@ def generate_prompt(file):
     
     """
 
-def document(file):
+def document_file(file):
     file = open("Example.swift", "r+")
     prompt = generate_prompt(file)
     max_tokens = 2048-len(prompt)
@@ -41,6 +42,15 @@ def document(file):
     file.write(response_text)
     file.close()
 
-document("Example.swift")
+def document_files(directory):
+    for root, dirs, files in os.walk(directory):
+        for file in files:
+            if file.endswith(".swift"):
+                print(os.path.join(root, file))
+                # document_file(file)
+
+document_files(args.package)
+# document_file("Example.swift")
+
 subprocess.run(f"git diff Example.swift", shell=True)
 subprocess.run(f"git restore Example.swift", shell=True)
