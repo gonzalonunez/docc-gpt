@@ -26,6 +26,9 @@ let package = Package(
 			name: "DoccGPT",
 			dependencies: [
 				.product(name: "ArgumentParser", package: "swift-argument-parser"),
-			]),
+			],
+      resources: [
+        .process("Resources/prompt.txt"),
+      ]),
 	]
 )

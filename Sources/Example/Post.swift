@@ -17,7 +17,7 @@ struct Post: Codable {
 
    - Parameter baseURL: The base URL to use for the post.
 
-   - Returns: A `URL` for the post.
+   - Returns: A `URL` for the post, constructed from `baseURL` and `id`.
    */
   func url(baseURL: String) -> URL? {
     return URL(string: "\(baseURL)/posts/\(id)")

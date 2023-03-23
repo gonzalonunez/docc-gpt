@@ -38,7 +38,12 @@ struct DoccGPTRunner {
     }
 
     let fileContents = try String(contentsOf: fileURL)
-    let prompt = initialInstruction + """
+    guard let promptURL = Bundle.module.url(forResource: "prompt", withExtension: "txt") else {
+      throw DoccGPTRunnerError.missingPrompt
+    }
+
+    let initialPrompt = try String(contentsOf: promptURL)
+    let prompt = initialPrompt + """
     
     Before:
     ```
