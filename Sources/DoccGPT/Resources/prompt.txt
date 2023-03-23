@@ -1,4 +1,3 @@
-let initialInstruction = #"""
 Please add Swift-flavored markdown comments to this code. Do not modify any of the code or any preexisting comments. Do not add any other types of comments, like file headers. Make sure that every single line of code is documented. Do not write new code. Only write new Swift-flavored markdown comments:
 
 Before:
@@ -96,4 +95,4 @@ struct EditParameters: Encodable {
 ```
 
 Please add Swift-flavored markdown comments to this code. Do not modify any of the code or any preexisting comments. Do not add any other types of comments, like file headers. Make sure that every single line of code is documented. Do not write new code. Only write new Swift-flavored markdown comments:
-"""#
+
