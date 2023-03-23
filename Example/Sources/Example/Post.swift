@@ -1,3 +1,5 @@
+import Foundation
+
 struct Post: Codable {
   var id: String
   var createdAt: Date
