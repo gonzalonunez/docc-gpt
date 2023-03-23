@@ -69,7 +69,7 @@ struct DoccGPTRunner {
   }
 
   private func documentFiles(in directoryURL: URL) async throws {
-    guard let enumerator = fileManager.enumerator(atPath: directoryURL.absoluteString) else {
+    guard let enumerator = fileManager.enumerator(atPath: directoryURL.path) else {
       throw DoccGPTRunnerError.failedToCreateEnumerator
     }
 
