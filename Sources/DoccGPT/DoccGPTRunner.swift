@@ -62,10 +62,20 @@ struct DoccGPTRunner {
       throw DoccGPTRunnerError.missingResponses
     }
 
+    let replacementDirectory = try fileManager.url(
+      for: .itemReplacementDirectory,
+      in: .userDomainMask,
+      appropriateFor: fileURL,
+      create: true)
+
+    let replacementURL = replacementDirectory.appendingPathComponent(fileURL.lastPathComponent)
+
     try firstChoice.text.write(
-      to: fileURL,
+      to: replacementURL,
       atomically: true,
       encoding: .utf8)
+
+     _ = try fileManager.replaceItemAt(fileURL, withItemAt: replacementURL)
   }
 
   private func documentFiles(in directoryURL: URL) async throws {
