@@ -14,9 +14,9 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "DoccGPT"
-               BuildableName = "DoccGPT"
-               BlueprintName = "DoccGPT"
+               BlueprintIdentifier = "docc-gpt"
+               BuildableName = "docc-gpt"
+               BlueprintName = "docc-gpt"
                ReferencedContainer = "container:">
             </BuildableReference>
          </BuildActionEntry>
@@ -69,12 +69,22 @@
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "DoccGPT"
-            BuildableName = "DoccGPT"
-            BlueprintName = "DoccGPT"
+            BlueprintIdentifier = "docc-gpt"
+            BuildableName = "docc-gpt"
+            BlueprintName = "docc-gpt"
             ReferencedContainer = "container:">
          </BuildableReference>
       </BuildableProductRunnable>
+      <CommandLineArguments>
+         <CommandLineArgument
+            argument = "/Users/gonzalonunez/docc-gpt/Sources/Example"
+            isEnabled = "YES">
+         </CommandLineArgument>
+         <CommandLineArgument
+            argument = "-k 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"
+            isEnabled = "YES">
+         </CommandLineArgument>
+      </CommandLineArguments>
    </LaunchAction>
    <ProfileAction
       buildConfiguration = "Release"
@@ -86,9 +96,9 @@
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "DoccGPT"
-            BuildableName = "DoccGPT"
-            BlueprintName = "DoccGPT"
+            BlueprintIdentifier = "docc-gpt"
+            BuildableName = "docc-gpt"
+            BlueprintName = "docc-gpt"
             ReferencedContainer = "container:">
          </BuildableReference>
       </BuildableProductRunnable>

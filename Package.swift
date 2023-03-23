@@ -7,7 +7,7 @@ let package = Package(
   platforms: [.macOS(.v12)],
 	products: [
 		.executable(
-			name: "DoccGPT",
+			name: "docc-gpt",
 			targets: ["DoccGPT"]),
 
     .library(
