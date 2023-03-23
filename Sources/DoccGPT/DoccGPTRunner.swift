@@ -75,7 +75,10 @@ struct DoccGPTRunner {
       atomically: true,
       encoding: .utf8)
 
-     _ = try fileManager.replaceItemAt(fileURL, withItemAt: replacementURL)
+    print(try String(contentsOf: replacementURL))
+    print("\n---------\n")
+
+//     _ = try fileManager.replaceItemAt(fileURL, withItemAt: replacementURL)
   }
 
   private func documentFiles(in directoryURL: URL) async throws {
