@@ -28,7 +28,7 @@ def generate_prompt(file):
     """
 
 def document_file(file):
-    file = open("Example.swift", "r+")
+    file = open(file, "r+")
     prompt = generate_prompt(file)
     max_tokens = 2048-len(prompt)
     completion = openai.Completion.create(
