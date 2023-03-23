@@ -4,8 +4,8 @@ struct EditParameters: Encodable {
   var model: String
   var input: String
   var instruction: String
-  var temperature: Int
-  var topP: Int
+  var temperature: Double
+  var topP: Double
 }
 
 struct EditResponse: Decodable {

@@ -1,0 +1,27 @@
+name: Format
+
+on:
+  push:
+    branches:
+      - main
+
+concurrency:
+  group: format-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  swift_format:
+    name: swift-format
+    runs-on: macos-12
+    steps:
+      - uses: actions/checkout@v2
+      - name: Install
+        run: brew install swift-format
+      - name: Format
+        run: swift format --configuration .swift-format.json --ignore-unparsable-files --in-place --recursive Package.swift ./Sources ./Tests
+      - uses: stefanzweifel/git-auto-commit-action@v4
+        with:
+          commit_message: Run swift-format
+          branch: "main"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
