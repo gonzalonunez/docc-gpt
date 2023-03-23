@@ -46,11 +46,11 @@ def document_files(directory):
     for root, dirs, files in os.walk(directory):
         for file in files:
             if file.endswith(".swift"):
-                print(os.path.join(root, file))
-                # document_file(file)
+                absolute_path = os.path.join(root, file)
+                abs_file = open(absolute_path, "r+")
+                document_file(abs_file)
 
 document_files(args.package)
-# document_file("Example.swift")
 
-subprocess.run(f"git diff Example.swift", shell=True)
-subprocess.run(f"git restore Example.swift", shell=True)
+subprocess.run(f"git diff", shell=True)
+subprocess.run(f"git restore {package_path}", shell=True)
