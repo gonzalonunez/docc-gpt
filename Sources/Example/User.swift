@@ -1,10 +1,3 @@
-//
-//  User.swift
-//  
-//
-//  Created by Gonzalo Nuñez on 3/23/23.
-//
-
 import Foundation
 
 struct User: Codable {

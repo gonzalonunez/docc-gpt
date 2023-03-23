@@ -1,10 +1,3 @@
-//
-//  DoccGPTRunner.swift
-//  
-//
-//  Created by Gonzalo Nuñez on 3/23/23.
-//
-
 import Foundation
 
 struct DoccGPTRunner {
@@ -75,10 +68,7 @@ struct DoccGPTRunner {
       atomically: true,
       encoding: .utf8)
 
-    print(try String(contentsOf: replacementURL))
-    print("\n---------\n")
-
-//     _ = try fileManager.replaceItemAt(fileURL, withItemAt: replacementURL)
+     _ = try fileManager.replaceItemAt(fileURL, withItemAt: replacementURL)
   }
 
   private func documentFiles(in directoryURL: URL) async throws {

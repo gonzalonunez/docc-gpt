@@ -1,10 +1,3 @@
-//
-//  GifLoop.swift
-//  
-//
-//  Created by Gonzalo Nuñez on 3/23/23.
-//
-
 import Foundation
 import ImageIO
 
