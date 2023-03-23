@@ -78,4 +78,4 @@ Well, for what it's worth, you're sending all of your code up to OpenAI's server
 
 Assuming we address the privacy implications and the limitations described above, maybe? I probably wouldn't dare auto-commit anything in CI though. I would more likely run this once on a given codebase, perhaps a very large one that's not well-documented, and then maintain it myself from there. At best, maybe I would run it in CI on pushes to `master` and have it open PRs automatically.
 
-That said, I don't think it's far-fetched at all to expect fully automated self-documenting codebases in the near-term future! My current first impressions are that a good prompt goes a long way and that there are huge performences differences between different models / APIs. I'm excited for the day where we'll be able to run powerful models locally.
+That said, I don't think it's far-fetched at all to expect fully automated self-documenting codebases in the near-term future! My current first impressions are that a good prompt goes a long way and that there are huge performance differences between different models / APIs. I'm excited for a future where we can run powerful models locally.
