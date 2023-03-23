@@ -23,6 +23,12 @@ class Bicycle {
         case bullhorn
     }
 
+    struct Rider {
+        let age: String
+        let name: String
+    }
+
+    let rider: Rider
     let style: Style
     let gearing: Gearing
     let handlebar: Handlebar
@@ -94,6 +100,18 @@ class Bicycle {
         /// A powerful handlebar.
         case bullhorn
     }
+
+    /// A `struct` representing the rider of the bicycle
+    struct Rider {
+        /// The rider's age
+        let age: String
+
+        /// The rider's name
+        let name: String
+    }
+
+    /// The rider of the bicycle.
+    let rider: Rider
 
     /// The style of the bicycle.
     let style: Style
