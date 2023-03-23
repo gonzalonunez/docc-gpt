@@ -38,4 +38,4 @@ def document_files(directory):
 
 document_files(args.dir)
 subprocess.run(f"git diff", shell=True)
-subprocess.run(f"git restore {args.dir}", shell=True)
+# subprocess.run(f"git restore {args.dir}", shell=True)
