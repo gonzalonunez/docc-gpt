@@ -1,2 +1,2 @@
-# swift-gpt-plugin
-A Swift Package Plugin that uses GPT
+# docc-gpt
+Self-documenting Swift code
