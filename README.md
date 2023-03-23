@@ -1,4 +1,4 @@
-# DoccGPT
+# DoccGPT 🧹
 
 DoccGPT is an experiment in self-documenting Swift code by leveraging [OpenAI](https://platform.openai.com/docs/api-reference/edits) and [DocC](https://developer.apple.com/documentation/docc), Apple's documentation compiler:
 
@@ -32,7 +32,7 @@ struct GifWritingOptions {
 }
 ```
 
-Depending on the model used, it is smart enough to document itself. An initial attempt used the `/edits` endpoint instead of `/completions` and `text-davinci-003`, and it was only smart enough to document the simpler code in `/Example`. That said, I'm sure we can improve both the quality of the comments and there may still be sufficiently complex code that DoccGPT is unable to handle–any and all help improving DoccGPT is very much welcome!
+Depending on the model used, it is smart enough to document long and complex Swift code. An initial attempt used the `/edits` endpoint instead of `/completions` and `text-davinci-003` but it was only smart enough to document the simpler code in `/Example` and would not make any changes to `/DoccGPT`. That said, I'm sure we can still improve both the quality of the comments. And there may still be sufficiently complex code that DoccGPT is unable to handle, I don't know. Any and all help improving DoccGPT is very much welcome!
 
 ## Basic usage
 
@@ -78,4 +78,4 @@ Well, for what it's worth, you're sending all of your code up to OpenAI's server
 
 Assuming we address the privacy implications and the limitations described above, maybe? I probably wouldn't dare auto-commit anything in CI though. I would more likely run this once on a given codebase, perhaps a very large one that's not well-documented, and then maintain it myself from there. At best, maybe I would run it in CI on pushes to `master` and have it open PRs automatically.
 
-That said, I don't think it's far-fetched at all to expect a fully automated self-documenting codebases in the near-term future! My current first impressions are that a good prompt goes a long way and that there are huge performences differences between different models / APIs. I'm excited for the day where we'll be able to run powerful models locally.
+That said, I don't think it's far-fetched at all to expect fully automated self-documenting codebases in the near-term future! My current first impressions are that a good prompt goes a long way and that there are huge performences differences between different models / APIs. I'm excited for the day where we'll be able to run powerful models locally.
