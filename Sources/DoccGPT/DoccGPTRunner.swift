@@ -32,9 +32,13 @@ struct DoccGPTRunner {
   }()
 
   private func documentFile(fileURL: URL) async throws {
-    let fileContents = try String(contentsOf: fileURL)
+    print("᠅ Documenting file \(fileURL.lastPathComponent)...")
+    defer {
+      print("✓ Finished documenting file \(fileURL.lastPathComponent)...")
+    }
 
-    var instruction = initialInstruction + """
+    let fileContents = try String(contentsOf: fileURL)
+    let instruction = initialInstruction + """
     
     Before:
     ```
@@ -43,7 +47,6 @@ struct DoccGPTRunner {
 
     After:
     ```
-
     """
 
     let parameters = EditParameters(
