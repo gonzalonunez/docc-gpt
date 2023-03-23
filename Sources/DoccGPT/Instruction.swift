@@ -114,4 +114,60 @@ func greeting(to recipient: String) throws -> String {
 
 Please add Swift-flavored markdown comments to this code. Do not modify any of the code or any preexisting comments. Do not add any other types of comments, like file headers. Make sure that every single line of code is documented. Do not write new code. Only write new Swift-flavored markdown comments:
 
+Before:
+```
+struct MovieWritingOptions {
+  var loopDuration: TimeInterval
+  var duration: Int = 10
+  var shouldOverwrite: Bool = true
+}
+
+struct GifWritingOptions {
+  var duration: TimeInterval
+  var scale: CGFloat = 1
+  var gifLoop: GifLoop = .infinite
+  var shouldOverwrite: Bool = true
+  var qos: DispatchQoS.QoSClass = .default
+  var skipsFailedImages: Bool = true
+}
+```
+
+After:
+```
+/// A `struct` representing options for writing a movie
+struct MovieWritingOptions {
+  /// The duration of the loop
+  var loopDuration: TimeInterval
+
+  /// The overall duration of the movie
+  var duration: Int = 10
+
+  /// Whether or not the movie file should be overwritten if it already exists
+  var shouldOverwrite: Bool = true
+}
+
+/// A `struct` representing options for writing a gif
+struct GifWritingOptions {
+
+  /// The duration of the gif
+  var duration: TimeInterval
+
+  /// The scaling to apply to the gif
+  var scale: CGFloat = 1
+
+  /// The `GifLoop` of the underlying gif
+  var gifLoop: GifLoop = .infinite
+
+  /// Whether or not the gif file should be overwritten if it already exists
+  var shouldOverwrite: Bool = true
+
+  /// The quality of service for the writing queue
+  var qos: DispatchQoS.QoSClass = .default
+
+  /// Whether or not images that fail to be written to the file should be skipped
+  var skipsFailedImages: Bool = true
+}
+```
+
+Please add Swift-flavored markdown comments to this code. Do not modify any of the code or any preexisting comments. Do not add any other types of comments, like file headers. Make sure that every single line of code is documented. Do not write new code. Only write new Swift-flavored markdown comments:
 """#

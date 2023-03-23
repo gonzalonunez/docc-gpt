@@ -35,7 +35,7 @@ struct DoccGPTRunner {
     let fileContents = try String(contentsOf: fileURL)
 
     var instruction = initialInstruction + """
-
+    
     Before:
     ```
     \(fileContents)
