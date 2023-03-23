@@ -18,3 +18,13 @@ struct DoccGPT: AsyncParsableCommand {
   @Option(name: .shortAndLong, help: "Your secret API key for OpenAI")
   var key: String
 }
+
+#if DEBUG
+extension DoccGPT {
+
+  init(directory: String, key: String) {
+    self.directory = directory
+    self.key = key
+  }
+}
+#endif
