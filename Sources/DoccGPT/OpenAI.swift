@@ -1,15 +1,19 @@
 import Foundation
 
-struct EditParameters: Encodable {
+struct CompletionParameters: Encodable {
   var model: String
-  var input: String
-  var instruction: String
+  var prompt: String
+  var maxTokens: Int
   var temperature: Double
   var topP: Double
+  var n: Double
+  var stream: Bool
+  var logprobs: Int?
+  var stop: String
 }
 
-struct EditResponse: Decodable {
-  var choices: [EditResponse.Choice]
+struct CompletionResponse: Decodable {
+  var choices: [Choice]
 
   struct Choice: Decodable {
     var text: String

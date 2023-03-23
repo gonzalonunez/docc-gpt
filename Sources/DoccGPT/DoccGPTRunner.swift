@@ -12,7 +12,7 @@ struct DoccGPTRunner {
 
   // MARK: Private
 
-  private let baseURL = URL(string: "https://api.openai.com/v1/edits")!
+  private let baseURL = URL(string: "https://api.openai.com/v1/completions")!
   private let fileManager = FileManager.default
 
   private let ignoredFiles: Set<String> = [
@@ -38,7 +38,7 @@ struct DoccGPTRunner {
     }
 
     let fileContents = try String(contentsOf: fileURL)
-    let instruction = initialInstruction + """
+    let prompt = initialInstruction + """
     
     Before:
     ```
@@ -47,14 +47,18 @@ struct DoccGPTRunner {
 
     After:
     ```
+
     """
 
-    let parameters = EditParameters(
-      model: "code-davinci-edit-001",
-      input: fileContents,
-      instruction: instruction,
+    let parameters = CompletionParameters(
+      model: "text-davinci-003",
+      prompt: prompt,
+      maxTokens: 2048,
       temperature: 0,
-      topP: 1)
+      topP: 1,
+      n: 1,
+      stream: false,
+      stop: "```")
 
     var request = URLRequest(url: baseURL)
     request.httpBody = try jsonEncoder.encode(parameters)
@@ -65,7 +69,7 @@ struct DoccGPTRunner {
     ]
 
     let (data, _) = try await URLSession.shared.data(for: request)
-    let response = try jsonDecoder.decode(EditResponse.self, from: data)
+    let response = try jsonDecoder.decode(CompletionResponse.self, from: data)
 
     guard let firstChoice = response.choices.first else {
       throw DoccGPTRunnerError.missingResponses
