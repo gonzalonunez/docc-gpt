@@ -1,175 +1,117 @@
-let instruction = #"""
-Add Swift-flavored markdown comments. Do not modify any of the code or any preexisting comments. Make sure all of the code is documented. Here is a before and after example of well-documented code:
+let initialInstruction = #"""
+Please add Swift-flavored markdown comments to this code. Do not modify any of the code or any preexisting comments. Do not add any other types of comments, like file headers. Make sure that every single line of code is documented. Do not write new code. Only write new Swift-flavored markdown comments:
 
 Before:
-class Bicycle {
+```
+import Foundation
 
-    enum Style {
-        case road
-        case touring
-        case cruiser
-        case hybrid
-    }
-
-    enum Gearing {
-        case fixed
-        case freewheel(speeds: Int)
-    }
-
-    enum Handlebar {
-        case riser
-        case café
-        case drop
-        case bullhorn
-    }
-
-    struct Rider {
-        let age: String
-        let name: String
-    }
-
-    let rider: Rider
-    let style: Style
-    let gearing: Gearing
-    let handlebar: Handlebar
-    let frameSize: Int
-
-    private(set) var numberOfTrips: Int
-    private(set) var distanceTraveled: Double
-
-    init(style: Style,
-         gearing: Gearing,
-         handlebar: Handlebar,
-         frameSize centimeters: Int)
-    {
-        self.style = style
-        self.gearing = gearing
-        self.handlebar = handlebar
-        self.frameSize = centimeters
-
-        self.numberOfTrips = 0
-        self.distanceTraveled = 0
-    }
-
-    func travel(distance meters: Double) {
-        precondition(meters > 0)
-        distanceTraveled += meters
-        numberOfTrips += 1
-    }
+struct User: Codable {
+  let email: String
+  let password: String
+  let firstName: String
+  let lastName: String
 }
-
+```
 
 After:
-/// 🚲 A two-wheeled, human-powered mode of transportation.
-class Bicycle {
-    /// Frame and construction style.
-    enum Style {
-        /// A style for streets or trails.
-        case road
+```
+import Foundation
 
-        /// A style for long journeys.
-        case touring
+/// A `struct` representing a user
+struct User: Codable {
 
-        /// A style for casual trips around town.
-        case cruiser
+  /// The user's email
+  let email: String
 
-        /// A style for general-purpose transportation.
-        case hybrid
-    }
+  /// The user's password
+  let password: String
 
-    /// Mechanism for converting pedal power into motion.
-    enum Gearing {
-        /// A single, fixed gear.
-        case fixed
+  /// The user's first name
+  let firstName: String
 
-        /// A variable-speed, disengageable gear.
-        case freewheel(speeds: Int)
-    }
-
-    /// Hardware used for steering.
-    enum Handlebar {
-        /// A casual handlebar.
-        case riser
-
-        /// An upright handlebar.
-        case café
-
-        /// A classic handlebar.
-        case drop
-
-        /// A powerful handlebar.
-        case bullhorn
-    }
-
-    /// A `struct` representing the rider of the bicycle
-    struct Rider {
-        /// The rider's age
-        let age: String
-
-        /// The rider's name
-        let name: String
-    }
-
-    /// The rider of the bicycle.
-    let rider: Rider
-
-    /// The style of the bicycle.
-    let style: Style
-
-    /// The gearing of the bicycle.
-    let gearing: Gearing
-
-    /// The handlebar of the bicycle.
-    let handlebar: Handlebar
-
-    /// The size of the frame, in centimeters.
-    let frameSize: Int
-
-    /// The number of trips traveled by the bicycle.
-    private(set) var numberOfTrips: Int
-
-    /// The total distance traveled by the bicycle, in meters.
-    private(set) var distanceTraveled: Double
-
-    /**
-     Initializes a new bicycle with the provided parts and specifications.
-
-     - Parameters:
-        - style: The style of the bicycle
-        - gearing: The gearing of the bicycle
-        - handlebar: The handlebar of the bicycle
-        - frameSize: The frame size of the bicycle, in centimeters
-
-     - Returns: A beautiful, brand-new bicycle,
-                custom-built just for you.
-     */
-    init(style: Style,
-         gearing: Gearing,
-         handlebar: Handlebar,
-         frameSize centimeters: Int)
-    {
-        self.style = style
-        self.gearing = gearing
-        self.handlebar = handlebar
-        self.frameSize = centimeters
-
-        self.numberOfTrips = 0
-        self.distanceTraveled = 0
-    }
-
-    /**
-     Take a bike out for a spin.
-
-     Calling this method increments the `numberOfTrips`
-     and increases `distanceTraveled` by the value of `meters`.
-
-     - Parameter meters: The distance to travel in meters.
-     - Precondition: `meters` must be greater than 0.
-     */
-    func travel(distance meters: Double) {
-        precondition(meters > 0)
-        distanceTraveled += meters
-        numberOfTrips += 1
-    }
+  /// The user's last name
+  let lastName: String
 }
+```
+
+Please add Swift-flavored markdown comments to this code. Do not modify any of the code or any preexisting comments. Do not add any other types of comments, like file headers. Make sure that every single line of code is documented. Do not write new code. Only write new Swift-flavored markdown comments:
+
+Before:
+```
+import Foundation
+
+struct Post: Codable {
+  var id: String
+  var createdAt: Date
+  var updatedAt: Date
+
+  func url(baseURL: String) -> URL? {
+    return URL(string: "\(baseURL)/posts/\(id)")
+  }
+}
+```
+
+After:
+```
+import Foundation
+
+/// A `struct` representing a Post
+struct Post: Codable {
+
+  /// The post's id
+  var id: String
+
+  /// The date the post was created
+  var createdAt: Date
+
+  /// The date the post was last updated at
+  var updatedAt: Date
+
+  /**
+  Returns the `URL` of the post given a `baseURL`.
+
+  - Parameter baseURL: the base `URL` of the post
+  - Returns: the `URL` of the post relative to the `baseURL`
+  */
+  func url(baseURL: String) -> URL? {
+    return URL(string: "\(baseURL)/posts/\(id)")
+  }
+}
+```
+
+Please add Swift-flavored markdown comments to this code. Do not modify any of the code or any preexisting comments. Do not add any other types of comments, like file headers. Make sure that every single line of code is documented. Do not write new code. Only write new Swift-flavored markdown comments:
+
+Before:
+```
+func greeting(to recipient: String) throws -> String {
+  guard recipient != "Derek" else {
+    throw MyError.invalidRecipient
+  }
+  return "Greetings, \(recipient)!"
+}
+```
+
+After:
+```
+/**
+ Creates a personalized greeting for a recipient.
+
+ - Parameter recipient: The person being greeted.
+
+ - Throws: `MyError.invalidRecipient`
+           if `recipient` is "Derek"
+           (he knows what he did).
+
+ - Returns: A new string saying hello to `recipient`.
+ */
+func greeting(to recipient: String) throws -> String {
+  guard recipient != "Derek" else {
+    throw MyError.invalidRecipient
+  }
+  return "Greetings, \(recipient)!"
+}
+```
+
+Please add Swift-flavored markdown comments to this code. Do not modify any of the code or any preexisting comments. Do not add any other types of comments, like file headers. Make sure that every single line of code is documented. Do not write new code. Only write new Swift-flavored markdown comments:
+
 """#

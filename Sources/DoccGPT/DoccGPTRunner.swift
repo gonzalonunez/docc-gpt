@@ -33,6 +33,19 @@ struct DoccGPTRunner {
 
   private func documentFile(fileURL: URL) async throws {
     let fileContents = try String(contentsOf: fileURL)
+
+    var instruction = initialInstruction + """
+
+    Before:
+    ```
+    \(fileContents)
+    ```
+
+    After:
+    ```
+
+    """
+
     let parameters = EditParameters(
       model: "code-davinci-edit-001",
       input: fileContents,
