@@ -1,5 +1,9 @@
 # DoccGPT 🧹
 
+![](https://github.com/gonzalonunez/docc-gpt/actions/workflows/build.yml/badge.svg)
+[![](https://img.shields.io/endpoint?url=https%3A%2F%2Fswiftpackageindex.com%2Fapi%2Fpackages%2Fgonzalonunez%2Fdocc-gpt%2Fbadge%3Ftype%3Dswift-versions)](https://swiftpackageindex.com/gonzalonunez/docc-gpt)
+[![](https://img.shields.io/endpoint?url=https%3A%2F%2Fswiftpackageindex.com%2Fapi%2Fpackages%2Fgonzalonunez%2Fdocc-gpt%2Fbadge%3Ftype%3Dplatforms)](https://swiftpackageindex.com/gonzalonunez/docc-gpt)
+
 DoccGPT is an experiment in self-documenting Swift code by leveraging [OpenAI](https://platform.openai.com/docs/api-reference/edits) and [DocC](https://developer.apple.com/documentation/docc), Apple's documentation compiler:
 
 > The DocC documentation compiler converts Markdown-based text into rich documentation for Swift and Objective-C projects, and displays it right in the Xcode documentation window. You can also host this documentation on a website.
