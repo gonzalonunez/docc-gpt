@@ -34,7 +34,7 @@ struct DoccGPTRunner {
   private func documentFile(fileURL: URL) async throws {
     print("᠅ Documenting file \(fileURL.lastPathComponent)...")
     defer {
-      print("✓ Finished documenting file \(fileURL.lastPathComponent)...")
+      print("✓ Finished documenting file \(fileURL.lastPathComponent)")
     }
 
     let fileContents = try String(contentsOf: fileURL)
