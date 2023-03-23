@@ -18,7 +18,7 @@ jobs:
       - name: Install
         run: brew install swift-format
       - name: Format
-        run: swift format --configuration .swift-format.json --ignore-unparsable-files --in-place --recursive Package.swift ./Sources ./Tests
+        run: swift format --configuration .swift-format.json --ignore-unparsable-files --in-place --recursive Package.swift ./Sources
       - uses: stefanzweifel/git-auto-commit-action@v4
         with:
           commit_message: Run swift-format
