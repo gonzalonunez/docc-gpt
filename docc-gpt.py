@@ -18,7 +18,7 @@ def document_file(file_path):
     response = requests.post(
         'https://api.openai.com/v1/edits', 
         headers={
-            f"Authorization: Bearer {args.key}"
+            "Authorization": f"Bearer {args.key}",
             "Content-Type": "application/json",
         },
         json={
@@ -29,7 +29,7 @@ def document_file(file_path):
           "top_p": 1
         })
         
-    response_text = response.json().choices[0].text
+    response_text = response.json()['choices'][0]['text']
     file.seek(0)
     file.write(response_text)
     file.close()
