@@ -41,4 +41,3 @@ struct CompletionResponse: Decodable {
     var text: String
   }
 }
-

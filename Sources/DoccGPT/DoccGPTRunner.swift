@@ -29,7 +29,7 @@ struct DoccGPTRunner {
 
   /// A set of files to ignore when running the OpenAI API.
   private let ignoredFiles: Set<String> = [
-    "Package.swift",
+    "Package.swift"
   ]
 
   /// The `JSONEncoder` used to encode parameters for the OpenAI API.
@@ -65,17 +65,18 @@ struct DoccGPTRunner {
     }
 
     let initialPrompt = try String(contentsOf: promptURL)
-    let prompt = initialPrompt + """
-    
-    Before:
-    ```
-    \(fileContents)
-    ```
+    let prompt =
+      initialPrompt + """
 
-    After:
-    ```
+      Before:
+      ```
+      \(fileContents)
+      ```
 
-    """
+      After:
+      ```
+
+      """
 
     let parameters = CompletionParameters(
       model: "text-davinci-003",
@@ -92,7 +93,7 @@ struct DoccGPTRunner {
     request.httpMethod = "POST"
     request.allHTTPHeaderFields = [
       "Authorization": "Bearer \(apiKey)",
-      "Content-Type": "application/json"
+      "Content-Type": "application/json",
     ]
 
     let (data, _) = try await URLSession.shared.data(for: request)
@@ -115,12 +116,12 @@ struct DoccGPTRunner {
       atomically: true,
       encoding: .utf8)
 
-     _ = try fileManager.replaceItemAt(fileURL, withItemAt: replacementURL)
+    _ = try fileManager.replaceItemAt(fileURL, withItemAt: replacementURL)
   }
 
   /**
    Documents files in a directory using the OpenAI GPT-3 API.
-   
+
    Sadly, I had to write this last comment myself because I can't get around the token limit!
 
    - Parameter directoryURL: The URL of the directory to document.

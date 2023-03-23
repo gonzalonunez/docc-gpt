@@ -11,4 +11,3 @@ enum DoccGPTRunnerError: Error {
   /// Thrown when the responses are missing.
   case missingResponses
 }
-

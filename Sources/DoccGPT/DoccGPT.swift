@@ -24,13 +24,12 @@ struct DoccGPT: AsyncParsableCommand {
 }
 
 #if DEBUG
-extension DoccGPT {
+  extension DoccGPT {
 
-  /// Initializes the command with the given parameters.
-  init(directory: String, key: String) {
-    self.directory = directory
-    self.key = key
+    /// Initializes the command with the given parameters.
+    init(directory: String, key: String) {
+      self.directory = directory
+      self.key = key
+    }
   }
-}
 #endif
-

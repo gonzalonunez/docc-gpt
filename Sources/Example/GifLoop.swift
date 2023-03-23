@@ -14,7 +14,7 @@ enum GifLoop {
     switch self {
     case .absolute(let loopCount):
       return [
-        kCGImagePropertyGIFLoopCount as String: loopCount,
+        kCGImagePropertyGIFLoopCount as String: loopCount
       ]
     }
   }
