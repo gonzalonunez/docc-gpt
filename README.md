@@ -36,7 +36,7 @@ struct GifWritingOptions {
 }
 ```
 
-Depending on the model used, it is smart enough to document long and complex Swift code. An initial attempt used the `/edits` endpoint instead of `/completions` and `text-davinci-003` but it was only smart enough to document the simpler code in `/Example` and would not make any changes to `/DoccGPT`. That said, I'm sure we can still improve both the quality of the comments. And there may still be sufficiently complex code that DoccGPT is unable to handle, I don't know. Any and all help improving DoccGPT is very much welcome!
+Depending on the model used, it is smart enough to document long and complex Swift code. An initial attempt used the `/edits` endpoint instead of `/completions` and `text-davinci-003` but it was only smart enough to document the simpler code in `/Example` and would not make any changes to `/DoccGPT`. That said, I'm sure we can still improve the quality of the comments. And there may still be sufficiently complex code that DoccGPT is unable to handle, I don't know. Any and all help improving DoccGPT is very much welcome!
 
 ## Basic usage
 
