@@ -120,6 +120,8 @@ struct DoccGPTRunner {
 
   /**
    Documents files in a directory using the OpenAI GPT-3 API.
+   
+   Sadly, I had to write this last comment myself because I can't get around the token limit!
 
    - Parameter directoryURL: The URL of the directory to document.
 
