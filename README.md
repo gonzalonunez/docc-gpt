@@ -6,6 +6,8 @@
 
 https://user-images.githubusercontent.com/6403910/227589893-a1c47996-df5a-4d37-83a8-65bd5c515912.mov
 
+---
+
 DoccGPT is an experiment in fully automating the documentation of a Swift codebase (not quite there yet, but we'll get there, read the FAQ below). It works by leveraging [OpenAI](https://platform.openai.com/docs/api-reference/completions) and [DocC](https://developer.apple.com/documentation/docc), Apple's documentation compiler:
 
 > The DocC documentation compiler converts Markdown-based text into rich documentation for Swift and Objective-C projects, and displays it right in the Xcode documentation window. You can also host this documentation on a website.
