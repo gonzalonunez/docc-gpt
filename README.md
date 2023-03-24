@@ -84,7 +84,7 @@ An earlier working version of DoccGPT used the `/edits` endpoint (in beta at the
 
 Number of tokens is an issue, it seems. I was unable to fully document `DoccGPTRunner.swift` because I ran out of tokens. The current token limit, at least the one that `text-davinci-003` has, is not viable for what I would say is the average Swift file. For now, I suppose the solution is to write less code, use GPT-4, or wait until GPT-5 😄
 
-I also haven't figured out what to do about re-running the model on a file that has already been documented. Most of the time, `text-davinci-003` will remove the final newline in the file. This can probably be fixed with better prompting. Worse models tended to produce slightly different output or build upon their previous work to produce more detailed comments.
+I also haven't figured out what to do about re-running the model on a file that has already been documented. Most of the time, `text-davinci-003` will remove the final newline in the file. With more complex code, sometimes it will make a different decision than the one it had made previously. Perhaps most importantly, I have not figured out how to get it to re-document code if the functionality has changed. All of this can probably be fixed with better prompting or a better model.
 
 Lastly, there is quite a bit of other basic CLI work needed to take this all of the way to a usable state, like exposing the ability to ignore certain files/subdirectories.
 
