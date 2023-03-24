@@ -95,3 +95,7 @@ I am not aware of the privacy implications of sending an entire codebase up to O
 Assuming we address the privacy implications and the limitations described above, maybe? I would probably avoid auto-committing anything through CI, although `text-davinci-003` seems to be very good at documenting code in a deterministic and high quality way.
 
 That said, I do not think it is far-fetched at all to expect fully automated self-documenting codebases in the near-term future. My current first impressions are that a good prompt goes a long way and that there are huge performance differences between different models / APIs. I'm excited for a future where we can run powerful models locally.
+
+## One more thing...
+
+The curious reader may notice that some of the documentation examples used in the prompt come from the inimitable [NSHipster](https://nshipster.com/swift-documentation/). I'm a longtime fan and tremendous appreciator of everything that NSHipster has done for the mobile developers all over the world.
