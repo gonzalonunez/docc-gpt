@@ -4,7 +4,7 @@
 [![](https://img.shields.io/endpoint?url=https%3A%2F%2Fswiftpackageindex.com%2Fapi%2Fpackages%2Fgonzalonunez%2Fdocc-gpt%2Fbadge%3Ftype%3Dswift-versions)](https://swiftpackageindex.com/gonzalonunez/docc-gpt)
 [![](https://img.shields.io/endpoint?url=https%3A%2F%2Fswiftpackageindex.com%2Fapi%2Fpackages%2Fgonzalonunez%2Fdocc-gpt%2Fbadge%3Ftype%3Dplatforms)](https://swiftpackageindex.com/gonzalonunez/docc-gpt)
 
-DoccGPT is an experiment in fully automating the documentation of a Swift codebase (not quite there yet, but we'll get there, read the FAQ below). It works by leveraging [OpenAI](https://platform.openai.com/docs/api-reference/edits) and [DocC](https://developer.apple.com/documentation/docc), Apple's documentation compiler:
+DoccGPT is an experiment in fully automating the documentation of a Swift codebase (not quite there yet, but we'll get there, read the FAQ below). It works by leveraging [OpenAI](https://platform.openai.com/docs/api-reference/completions) and [DocC](https://developer.apple.com/documentation/docc), Apple's documentation compiler:
 
 > The DocC documentation compiler converts Markdown-based text into rich documentation for Swift and Objective-C projects, and displays it right in the Xcode documentation window. You can also host this documentation on a website.
 
