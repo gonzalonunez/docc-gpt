@@ -90,7 +90,7 @@ Lastly, there is quite a bit of other basic CLI work needed to take this all of 
 
 #### Would I use this in production?
 
-I am not aware of the privacy implications of sending an entire codebase up to OpenAI's servers, but for that reason alone I probably would not use this.
+I am not aware of the privacy implications of sending an entire codebase up to OpenAI's servers, but for that reason alone I would probably not use this.
 
 Assuming we address the privacy implications and the limitations described above, maybe? I would probably avoid auto-committing anything through CI, although `text-davinci-003` seems to be very good at documenting code in a deterministic and high quality way.
 
