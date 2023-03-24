@@ -1,17 +1,17 @@
 import Foundation
 
 /// A `struct` representing a user.
-struct User: Codable {
+public struct User: Codable {
 
   /// The user's email address.
-  let email: String
+  public let email: String
 
   /// The user's password.
-  let password: String
+  public let password: String
 
   /// The user's first name.
-  let firstName: String
+  public let firstName: String
 
   /// The user's last name.
-  let lastName: String
+  public let lastName: String
 }

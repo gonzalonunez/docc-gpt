@@ -1,4 +1,4 @@
-// swift-tools-version: 5.7
+// swift-tools-version: 5.6
 
 import PackageDescription
 
@@ -8,7 +8,7 @@ let package = Package(
   products: [
     .executable(
       name: "docc-gpt",
-      targets: ["DoccGPT"]),
+      targets: ["docc-gpt"]),
 
     .library(
       name: "Example",
@@ -23,7 +23,7 @@ let package = Package(
       dependencies: []),
 
     .executableTarget(
-      name: "DoccGPT",
+      name: "docc-gpt",
       dependencies: [
         .product(name: "ArgumentParser", package: "swift-argument-parser")
       ],

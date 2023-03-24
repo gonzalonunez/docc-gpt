@@ -2,7 +2,7 @@ import Foundation
 import ImageIO
 
 /// Represents the loop count of a GIF.
-enum GifLoop {
+public enum GifLoop {
   /// The GIF will loop a specific number of times.
   case absolute(Int)
 
