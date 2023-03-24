@@ -2,4 +2,4 @@ version: 1
 builder:
   configs:
     - platform: macos-spm
-      documentation_targets: [Example, DoccGPT]
+      documentation_targets: [docc-gpt, Example]
