@@ -7,7 +7,7 @@ public enum GifLoop {
   case absolute(Int)
 
   /// The GIF will loop infinitely.
-  static var infinite = GifLoop.absolute(0)
+  public static var infinite = GifLoop.absolute(0)
 
   /// A dictionary representation of the loop count.
   public var dict: [String: Int] {
