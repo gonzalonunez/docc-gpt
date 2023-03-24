@@ -98,4 +98,4 @@ That said, I do not think it is far-fetched at all to expect fully automated sel
 
 ## One more thing...
 
-The curious reader may notice that some of the documentation examples used in the prompt come from the inimitable [NSHipster](https://nshipster.com/swift-documentation/). I'm a longtime fan and tremendous appreciator of everything that NSHipster has done for the mobile developers all over the world.
+The curious reader may notice that some of the documentation examples used in the prompt come from the inimitable [NSHipster](https://nshipster.com/swift-documentation/). I'm a longtime fan and tremendous appreciator of everything that NSHipster has done for mobile developers all over the world.
