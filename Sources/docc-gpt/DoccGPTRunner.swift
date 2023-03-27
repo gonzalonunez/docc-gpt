@@ -21,8 +21,8 @@ struct DoccGPTRunner {
 
   // MARK: Private
 
-  /// The base URL for the OpenAI API.
-  private let baseURL = URL(string: "https://api.openai.com/v1/completions")!
+  /// The URL for the OpenAI API.
+  private let apiURL = URL(string: "https://api.openai.com/v1/completions")!
 
   /// The `FileManager` used to access the filesystem.
   private let fileManager = FileManager.default
@@ -88,7 +88,7 @@ struct DoccGPTRunner {
       stream: false,
       stop: "```")
 
-    var request = URLRequest(url: baseURL)
+    var request = URLRequest(url: apiURL)
     request.httpBody = try jsonEncoder.encode(parameters)
     request.httpMethod = "POST"
     request.allHTTPHeaderFields = [
@@ -129,16 +129,22 @@ struct DoccGPTRunner {
    - Throws: `DoccGPTRunnerError` if an error occurs.
    */
   private func documentFiles(in directoryURL: URL) async throws {
-    guard let enumerator = fileManager.enumerator(atPath: directoryURL.path) else {
-      throw DoccGPTRunnerError.failedToCreateEnumerator
-    }
-
-    while let file = enumerator.nextObject() as? String {
-      guard file.hasSuffix(".swift") && !ignoredFiles.contains(file) else {
-        continue
+    try await withThrowingTaskGroup(of: Void.self) { group in
+      guard let enumerator = fileManager.enumerator(atPath: directoryURL.path) else {
+        throw DoccGPTRunnerError.failedToCreateEnumerator
       }
-      let fileURL = directoryURL.appendingPathComponent(file)
-      try await documentFile(fileURL: fileURL)
+
+      while let file = enumerator.nextObject() as? String {
+        guard file.hasSuffix(".swift") && !ignoredFiles.contains(file) else {
+          continue
+        }
+        group.addTask {
+          let fileURL = directoryURL.appendingPathComponent(file)
+          try await documentFile(fileURL: fileURL)
+        }
+      }
+
+      try await group.waitForAll()
     }
   }
 }
