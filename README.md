@@ -62,7 +62,7 @@ Run the executable and give it a directory as well as your [OpenAI secret key](h
 > DoccGPT will attempt to rewrite the contents of every single `.swift` file in the directory that you give it. And if you feed it a sufficiently long file it won't make it all the way to the end!
 
 ```bash
-swift run docc-gpt <directory> --key <key>
+swift run docc-gpt <directory> [--model <model>] [--context-length <context-length>] --key <key> [--skip-files <skip-files>]
 ```
 
 ```bash
@@ -70,7 +70,12 @@ ARGUMENTS:
   <directory>             The folder whose contents you want to document
 
 OPTIONS:
+  -m, --model <model>     The OpenAI model to run (default: text-davinci-003)
+  --context-length <context-length>
+                          The context length corresponding to the OpenAI model chosen. (default: 4096)
   -k, --key <key>         Your secret API key for OpenAI
+  --skip-files <skip-files>
+                          Whether or not files unlikely to documented should be skipped (default: true)
   -h, --help              Show help information.
 ```
 
@@ -104,4 +109,4 @@ That said, I do not think it is far-fetched at all to expect fully automated sel
 
 ## One more thing...
 
-The curious reader may notice that some of the documentation examples used in the prompt come from the inimitable [NSHipster](https://nshipster.com/swift-documentation/). I'm a longtime fan and tremendous appreciator of everything that NSHipster has done for mobile developers all over the world.
+The curious reader may notice that some of the documentation examples used in the prompt come from the inimitable [NSHipster](https://nshipster.com/swift-documentation/). I'm a longtime fan and tremendous appreciator of everything that NSHipster has done for mobile developers everywhere.

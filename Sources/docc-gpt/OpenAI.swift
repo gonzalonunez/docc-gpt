@@ -41,3 +41,11 @@ struct CompletionResponse: Decodable {
     var text: String
   }
 }
+
+struct ErrorResponse: Decodable {
+  var error: ErrorInfo
+
+  struct ErrorInfo: Decodable {
+    var message: String
+  }
+}
