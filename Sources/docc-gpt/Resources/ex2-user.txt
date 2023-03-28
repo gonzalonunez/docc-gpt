@@ -1,0 +1,8 @@
+<BEGIN>
+enum Style {
+  case road
+  case touring
+  case cruiser
+  case hybrid
+}
+<END>

@@ -1,0 +1,16 @@
+<BEGIN>
+/// Frame and construction style.
+enum Style {
+  /// A style for streets or trails.
+  case road
+
+  /// A style for long journeys.
+  case touring
+
+  /// A style for casual trips around town.
+  case cruiser
+
+  /// A style for general-purpose transportation.
+  case hybrid
+}
+<END>

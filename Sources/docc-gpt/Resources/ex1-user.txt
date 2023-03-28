@@ -1,0 +1,8 @@
+<BEGIN>
+func greeting(to recipient: String) throws -> String {
+  guard recipient != "Derek" else {
+    throw MyError.invalidRecipient
+  }
+  return "Greetings, \(recipient)!"
+}
+<END>
