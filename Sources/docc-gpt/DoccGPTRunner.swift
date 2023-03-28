@@ -85,21 +85,22 @@ struct DoccGPTRunner {
       """
 
     let maxTokens = contextLength - prompt.count
-    if (maxTokens <= 0 && skipFiles) {
-      print("""
+    if maxTokens <= 0 && skipFiles {
+      print(
+        """
 
-      ⚠︎ Skipping \(fileURL.lastPathComponent) due to number of tokens in prompt (\(prompt.count)). This can \
-      happen for a number of reasons:
+        ⚠︎ Skipping \(fileURL.lastPathComponent) due to number of tokens in prompt (\(prompt.count)). This can \
+        happen for a number of reasons:
 
-      \t1. Make sure that the --context-length argument (\(contextLength)) is appropriate for the model that
-      \tyou've chosen to use. Most models have a context length of 2048 tokens (except for the newest models,
-      \twhich support 4096).
+        \t1. Make sure that the --context-length argument (\(contextLength)) is appropriate for the model that
+        \tyou've chosen to use. Most models have a context length of 2048 tokens (except for the newest models,
+        \twhich support 4096).
 
-      \t2. The token count of your prompt plus max_tokens cannot exceed the model's context length. The
-      \tprompt for this file is using \(prompt.count) tokens, which leaves \(maxTokens) tokens
-      \tremaining.
+        \t2. The token count of your prompt plus max_tokens cannot exceed the model's context length. The
+        \tprompt for this file is using \(prompt.count) tokens, which leaves \(maxTokens) tokens
+        \tremaining.
 
-      """)
+        """)
       return
     }
 
