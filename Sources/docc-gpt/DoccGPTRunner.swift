@@ -14,7 +14,7 @@ struct DoccGPTRunner {
   /// The OpenAI model to use with the OpenAI API.
   let model: String
 
-  /// Whether or not files unlikely to documented should be skipped.
+  /// Whether or not files that are too long to documented should be skipped.
   let skipFiles: Bool
 
   /**
