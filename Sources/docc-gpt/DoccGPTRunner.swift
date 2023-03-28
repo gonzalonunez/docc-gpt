@@ -8,6 +8,15 @@ struct DoccGPTRunner {
   /// The API key used to authenticate with the OpenAI API.
   let apiKey: String
 
+  /// The context length corresponding to the OpenAI model chosen.
+  let contextLength: Int
+
+  /// The OpenAI model to use with the OpenAI API.
+  let model: String
+
+  /// Whether or not files unlikely to documented should be skipped.
+  let skipFiles: Bool
+
   /**
    Runs the OpenAI GPT-3 API to document Swift files in a directory.
 
@@ -55,9 +64,6 @@ struct DoccGPTRunner {
    */
   private func documentFile(fileURL: URL) async throws {
     print("᠅ Documenting \(fileURL.lastPathComponent)...")
-    defer {
-      print("✓ Finished documenting \(fileURL.lastPathComponent)")
-    }
 
     let fileContents = try String(contentsOf: fileURL)
     guard let promptURL = Bundle.module.url(forResource: "prompt", withExtension: "txt") else {
@@ -78,10 +84,29 @@ struct DoccGPTRunner {
 
       """
 
+    let maxTokens = contextLength - prompt.count
+    if (maxTokens <= 0 && skipFiles) {
+      print("""
+
+      ⚠︎ Skipping \(fileURL.lastPathComponent) due to number of tokens in prompt (\(prompt.count)). This can \
+      happen for a number of reasons:
+
+      \t1. Make sure that the --context-length argument (\(contextLength)) is appropriate for the model that
+      \tyou've chosen to use. Most models have a context length of 2048 tokens (except for the newest models,
+      \twhich support 4096).
+
+      \t2. The token count of your prompt plus max_tokens cannot exceed the model's context length. The
+      \tprompt for this file is using \(prompt.count) tokens, which leaves \(maxTokens) tokens
+      \tremaining.
+
+      """)
+      return
+    }
+
     let parameters = CompletionParameters(
-      model: "text-davinci-003",
+      model: model,
       prompt: prompt,
-      maxTokens: 2048,
+      maxTokens: maxTokens,
       temperature: 0,
       topP: 1,
       n: 1,
@@ -96,10 +121,15 @@ struct DoccGPTRunner {
       "Content-Type": "application/json",
     ]
 
-    let (data, _) = try await URLSession.shared.data(for: request)
-    let response = try jsonDecoder.decode(CompletionResponse.self, from: data)
+    let (data, urlResponse) = try await URLSession.shared.data(for: request)
+    if let httpResponse = urlResponse as? HTTPURLResponse, httpResponse.statusCode != 200 {
+      let errorResponse = try jsonDecoder.decode(ErrorResponse.self, from: data)
+      throw DoccGPTRunnerError.openAI(errorResponse.error.message)
+    }
 
-    guard let firstChoice = response.choices.first else {
+    let completionResponse = try jsonDecoder.decode(CompletionResponse.self, from: data)
+
+    guard let firstChoice = completionResponse.choices.first else {
       throw DoccGPTRunnerError.missingResponses
     }
 
@@ -117,6 +147,8 @@ struct DoccGPTRunner {
       encoding: .utf8)
 
     _ = try fileManager.replaceItemAt(fileURL, withItemAt: replacementURL)
+
+    print("✓ Finished documenting \(fileURL.lastPathComponent)")
   }
 
   /**
