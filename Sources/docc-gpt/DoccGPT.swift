@@ -20,7 +20,7 @@ struct DoccGPT: AsyncParsableCommand {
 
   /// The OpenAI model to run
   @Option(name: .shortAndLong, help: "The OpenAI model to run")
-  var model: String = "text-davinci-003"
+  var model: String = "gpt-3.5-turbo"
 
   /// The context length corresponding to the OpenAI model chosen
   @Option(name: .long, help: "The context length corresponding to the OpenAI model chosen.")

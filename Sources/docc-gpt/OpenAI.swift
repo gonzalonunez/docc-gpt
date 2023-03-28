@@ -6,7 +6,7 @@ struct CompletionParameters: Encodable {
   var model: String
 
   /// The prompt text to use as a starting point for the completion.
-  var prompt: String
+  var messages: [Message]
 
   /// The maximum number of tokens to generate.
   var maxTokens: Int
@@ -28,6 +28,15 @@ struct CompletionParameters: Encodable {
 
   /// A string to stop the generation when it is encountered
   var stop: String
+
+  /// A `struct` representing a message sent to the completion endpoint
+  struct Message: Codable {
+    /// The role of the message
+    var role: String
+
+    /// The content of the message
+    var content: String
+  }
 }
 
 /// A `struct` representing the response from the completion endpoint
@@ -37,15 +46,35 @@ struct CompletionResponse: Decodable {
 
   /// A `struct` representing a single choice
   struct Choice: Decodable {
-    /// The text of the choice
-    var text: String
+    /// The message of the choice
+    var message: CompletionParameters.Message
   }
 }
 
+/// A `struct` representing an error response from the completion endpoint
 struct ErrorResponse: Decodable {
+  /// The error returned by the response
   var error: ErrorInfo
 
+  /// A `struct` representing information about an error
   struct ErrorInfo: Decodable {
+    /// The message of the error
     var message: String
+  }
+}
+
+extension Array where Element == CompletionParameters.Message {
+
+  /// The total tokens taken up by an array of messages
+  var totalTokens: Int {
+    reduce(0, { $0 + $1.totalTokens })
+  }
+}
+
+extension CompletionParameters.Message {
+
+  /// The total tokens taken up by a single message
+  var totalTokens: Int {
+    content.count + 6
   }
 }

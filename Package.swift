@@ -28,7 +28,7 @@ let package = Package(
         .product(name: "ArgumentParser", package: "swift-argument-parser")
       ],
       resources: [
-        .process("Resources/prompt.txt")
+        .process("Resources"),
       ]),
   ]
 )
