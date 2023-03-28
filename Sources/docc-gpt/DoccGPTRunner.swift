@@ -70,15 +70,16 @@ struct DoccGPTRunner {
     print("᠅ Documenting \(fileURL.lastPathComponent)...")
 
     let fileContents = try String(contentsOf: fileURL)
-    let allMessages = messages + [
-      .init(
-        role: "user",
-        content: """
-        <BEGIN>
-        \(fileContents)
-        <END>
-        """)
-    ]
+    let allMessages =
+      messages + [
+        .init(
+          role: "user",
+          content: """
+            <BEGIN>
+            \(fileContents)
+            <END>
+            """)
+      ]
 
     let maxTokens = contextLength - allMessages.totalTokens
     if maxTokens <= 0 && skipFiles {
