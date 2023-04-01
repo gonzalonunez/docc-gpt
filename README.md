@@ -62,7 +62,7 @@ Run the executable and give it a directory as well as your [OpenAI secret key](h
 > DoccGPT will attempt to rewrite the contents of every single `.swift` file in the directory that you give it. And if you feed it a sufficiently long file it won't make it all the way to the end!
 
 ```bash
-swift run docc-gpt <directory> [--model <model>] [--context-length <context-length>] --key <key> [--skip-files <skip-files>]
+swift run docc-gpt <directory> [--model <model>] [--context-length <context-length>] --key <key> [--log-level <log-level>] [--skip-files <skip-files>]
 ```
 
 ```bash
@@ -74,6 +74,8 @@ OPTIONS:
   --context-length <context-length>
                           The context length corresponding to the OpenAI model chosen (default: 4096)
   -k, --key <key>         Your secret API key for OpenAI
+  -l, --log-level <log-level>
+                          The desired log level (default: info)
   --skip-files <skip-files>
                           Whether or not files that are too long to documented should be skipped (default: true)
   -h, --help              Show help information.

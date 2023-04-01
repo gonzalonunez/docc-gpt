@@ -15,7 +15,8 @@ let package = Package(
       targets: ["Example"]),
   ],
   dependencies: [
-    .package(url: "https://github.com/apple/swift-argument-parser", from: "1.2.2")
+    .package(url: "https://github.com/apple/swift-argument-parser", from: "1.2.2"),
+    .package(url: "https://github.com/apple/swift-log", from: "1.5.2"),
   ],
   targets: [
     .target(
@@ -25,7 +26,8 @@ let package = Package(
     .executableTarget(
       name: "docc-gpt",
       dependencies: [
-        .product(name: "ArgumentParser", package: "swift-argument-parser")
+        .product(name: "ArgumentParser", package: "swift-argument-parser"),
+        .product(name: "Logging", package: "swift-log")
       ],
       resources: [
         .process("Resources")

@@ -1,4 +1,5 @@
 import Foundation
+import Logging
 
 /// A class for running the OpenAI GPT API to document Swift files.
 struct DoccGPTRunner {
@@ -10,6 +11,9 @@ struct DoccGPTRunner {
 
   /// The context length corresponding to the OpenAI model chosen.
   let contextLength: Int
+
+  /// The logger used to emit log messages.
+  let logger: Logger
 
   /// The OpenAI model to use with the OpenAI API.
   let model: String
@@ -33,6 +37,9 @@ struct DoccGPTRunner {
   /// The URL for the OpenAI API.
   private let apiURL = URL(string: "https://api.openai.com/v1/chat/completions")!
 
+  /// The expected prefix for messages from the OpenAI API
+  private let expectedPrefix = "<BEGIN>\n"
+
   /// The `FileManager` used to access the filesystem.
   private let fileManager = FileManager.default
 
@@ -40,9 +47,6 @@ struct DoccGPTRunner {
   private let ignoredFiles: Set<String> = [
     "Package.swift"
   ]
-
-  /// The expected prefix for messages from the OpenAI API
-  private let expectedPrefix = "<BEGIN>\n"
 
   /// The `JSONEncoder` used to encode parameters for the OpenAI API.
   private let jsonEncoder: JSONEncoder = {
@@ -67,7 +71,7 @@ struct DoccGPTRunner {
    - Throws: `DoccGPTRunnerError` if an error occurs.
    */
   private func documentFile(fileURL: URL, with messages: [CompletionParameters.Message]) async throws {
-    print("᠅ Documenting \(fileURL.lastPathComponent)...")
+    logger.info("᠅ Documenting \(fileURL.lastPathComponent)...")
 
     let fileContents = try String(contentsOf: fileURL)
     let allMessages =
@@ -83,7 +87,7 @@ struct DoccGPTRunner {
 
     let maxTokens = contextLength - allMessages.totalTokens
     if maxTokens <= 0 && skipFiles {
-      print(
+      logger.warning(
         """
 
         ⚠︎ Skipping \(fileURL.lastPathComponent) due to number of tokens in prompt \
@@ -153,7 +157,7 @@ struct DoccGPTRunner {
 
     _ = try fileManager.replaceItemAt(fileURL, withItemAt: replacementURL)
 
-    print("✓ Finished documenting \(fileURL.lastPathComponent)")
+    logger.info("✓ Finished documenting \(fileURL.lastPathComponent)")
   }
 
   /**
