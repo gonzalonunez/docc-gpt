@@ -53,7 +53,7 @@ struct DoccGPT: AsyncParsableCommand {
   var skipFiles: Bool = true
 }
 
-extension Logger.Level: ExpressibleByArgument { }
+extension Logger.Level: ExpressibleByArgument {}
 
 #if DEBUG
   extension DoccGPT {
