@@ -46,7 +46,7 @@ struct DoccGPT: AsyncParsableCommand {
 
   /// The desired log level.
   @Option(name: .shortAndLong, help: "The desired log level")
-  var logLevel: Logger.Level
+  var logLevel: Logger.Level = .info
 
   /// Whether or not files that are too long to documented should be skipped.
   @Option(name: .long, help: "Whether or not files that are too long to documented should be skipped")

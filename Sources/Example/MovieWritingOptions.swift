@@ -1,14 +1,14 @@
 import Foundation
 
-/// Options for writing a movie.
+/// Options for writing a movie file.
 public struct MovieWritingOptions {
 
-  /// The duration of the loop in seconds.
+  /// The duration of one loop of the movie.
   public var loopDuration: TimeInterval
 
-  /// The duration of the movie in seconds. Defaults to 10.
+  /// The total duration of the movie.
   public var duration: Int = 10
 
-  /// Whether to overwrite existing files. Defaults to true.
+  /// Whether to overwrite an existing file with the same name.
   public var shouldOverwrite: Bool = true
 }
