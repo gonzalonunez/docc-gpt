@@ -1,3 +1,4 @@
+#if canImport(ImageIO)
 import Foundation
 import ImageIO
 
@@ -20,3 +21,4 @@ public enum GifLoop {
     }
   }
 }
+#endif
