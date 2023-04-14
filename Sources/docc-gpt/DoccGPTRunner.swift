@@ -105,8 +105,9 @@ struct DoccGPTRunner {
 
         """)
       return
-    } else if (remainingTokens < Int(Double(fileContents.approximateTokens) * commentThreshold)) {
-      logger.warning("""
+    } else if remainingTokens < Int(Double(fileContents.approximateTokens) * commentThreshold) {
+      logger.warning(
+        """
 
         ⚠︎ Warning: Close to token limit for \(fileURL.lastPathComponent). Please ensure that the entire file
         was given back to you by DoccGPT.
