@@ -8,9 +8,6 @@ struct CompletionParameters: Encodable {
   /// The prompt text to use as a starting point for the completion.
   var messages: [Message]
 
-  /// The maximum number of tokens to generate.
-  var maxTokens: Int
-
   /// What sampling temperature to use, between 0 and 2
   var temperature: Double
 
@@ -75,6 +72,18 @@ extension CompletionParameters.Message {
 
   /// The total tokens taken up by a single message
   var totalTokens: Int {
-    content.count + 6
+    content.approximateTokens + 6
+  }
+}
+
+extension String {
+
+  /// The approximate number of tokens taken up by the receiver
+  ///
+  /// From OpenAI: https://platform.openai.com/docs/introduction/key-concepts
+  /// "As a rough rule of thumb, 1 token is approximately 4 characters or 0.75 words for English text."
+  var approximateTokens: Int {
+    let divided = Double(count) / 4
+    return Int(divided.rounded(.up))
   }
 }

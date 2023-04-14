@@ -73,6 +73,7 @@ struct DoccGPTRunner {
   private func documentFile(fileURL: URL, with messages: [CompletionParameters.Message]) async throws {
     logger.info("᠅ Documenting \(fileURL.lastPathComponent)...")
 
+    let commentThreshold = 1.1
     let fileContents = try String(contentsOf: fileURL)
     let allMessages =
       messages + [
@@ -85,8 +86,8 @@ struct DoccGPTRunner {
             """)
       ]
 
-    let maxTokens = contextLength - allMessages.totalTokens
-    if maxTokens <= 0 && skipFiles {
+    let remainingTokens = contextLength - allMessages.totalTokens
+    if remainingTokens <= fileContents.approximateTokens && skipFiles {
       logger.warning(
         """
 
@@ -97,18 +98,25 @@ struct DoccGPTRunner {
         \tyou've chosen to use. Most models have a context length of 2048 tokens (except for the newest models,
         \twhich support 4096).
 
-        \t2. The token count of your prompt plus max_tokens cannot exceed the model's context length. The
-        \tprompt for this file is using \(allMessages.totalTokens) tokens, which leaves \(maxTokens) tokens
-        \tremaining.
+        \t2. The total tokens taken up by the prompt plus those needed for an appropriate response cannot
+        \texceed the model's context length. The prompt for this file is using \(allMessages.totalTokens)
+        \ttokens, which leaves \(remainingTokens) tokens. Your file is \(fileContents.approximateTokens)
+        \ttokens.
 
         """)
       return
+    } else if (remainingTokens < Int(Double(fileContents.approximateTokens) * commentThreshold)) {
+      logger.warning("""
+
+        ⚠︎ Warning: Close to token limit for \(fileURL.lastPathComponent). Please ensure that the entire file
+        was given back to you by DoccGPT.
+
+        """)
     }
 
     let parameters = CompletionParameters(
       model: model,
       messages: allMessages,
-      maxTokens: maxTokens,
       temperature: 0,
       topP: 1,
       n: 1,
