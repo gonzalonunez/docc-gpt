@@ -4,19 +4,22 @@ import Logging
 /// A class for running the OpenAI GPT API to document Swift files.
 struct DoccGPTRunner {
 
+  init(
+    apiKey: String,
+    logger: Logger,
+    model: Model,
+    skipFiles: Bool)
+  {
+    self.apiService = OpenAIService(apiKey: apiKey, logger: logger)
+    self.logger = logger
+    self.model = model
+    self.skipFiles = skipFiles
+  }
+
   // MARK: Internal
 
-  /// The API key used to authenticate with the OpenAI API.
-  let apiKey: String
-
-  /// The context length corresponding to the OpenAI model chosen.
-  let contextLength: Int
-
-  /// The logger used to emit log messages.
-  let logger: Logger
-
   /// The OpenAI model to use with the OpenAI API.
-  let model: String
+  let model: Model
 
   /// Whether or not files that are too long to documented should be skipped.
   let skipFiles: Bool
@@ -34,140 +37,19 @@ struct DoccGPTRunner {
 
   // MARK: Private
 
-  /// The URL for the OpenAI API.
-  private let apiURL = URL(string: "https://api.openai.com/v1/chat/completions")!
-
-  /// The expected prefix for messages from the OpenAI API
-  private let expectedPrefix = "<BEGIN>\n"
+  /// The service used to communicate with the OpenAI API.
+  private let apiService: OpenAIService
 
   /// The `FileManager` used to access the filesystem.
   private let fileManager = FileManager.default
+
+  /// The logger used to emit log messages.
+  private let logger: Logger
 
   /// A set of files to ignore when running the OpenAI API.
   private let ignoredFiles: Set<String> = [
     "Package.swift"
   ]
-
-  /// The `JSONEncoder` used to encode parameters for the OpenAI API.
-  private let jsonEncoder: JSONEncoder = {
-    let encoder = JSONEncoder()
-    encoder.keyEncodingStrategy = .convertToSnakeCase
-    return encoder
-  }()
-
-  /// The `JSONDecoder` used to decode responses from the OpenAI API.
-  private let jsonDecoder: JSONDecoder = {
-    let encoder = JSONDecoder()
-    encoder.keyDecodingStrategy = .convertFromSnakeCase
-    return encoder
-  }()
-
-  /**
-   Documents a single Swift file using the OpenAI GPT API.
-
-   - Parameter fileURL: The URL of the file to document.
-   - Parameter messages: The messages to use when documenting the file.
-
-   - Throws: `DoccGPTRunnerError` if an error occurs.
-   */
-  private func documentFile(fileURL: URL, with messages: [CompletionParameters.Message]) async throws {
-    logger.info("᠅ Documenting \(fileURL.lastPathComponent)...")
-
-    let commentThreshold = 1.1
-    let fileContents = try String(contentsOf: fileURL)
-    let allMessages =
-      messages + [
-        .init(
-          role: "user",
-          content: """
-            <BEGIN>
-            \(fileContents)
-            <END>
-            """)
-      ]
-
-    let remainingTokens = contextLength - allMessages.totalTokens
-    if remainingTokens <= fileContents.approximateTokens && skipFiles {
-      logger.warning(
-        """
-
-        ⚠︎ Skipping \(fileURL.lastPathComponent) due to number of tokens in prompt \
-        (\(allMessages.totalTokens)). This can happen for a number of reasons:
-
-        \t1. Make sure that the --context-length argument (\(contextLength)) is appropriate for the model that
-        \tyou've chosen to use. Most models have a context length of 2048 tokens (except for the newest models,
-        \twhich support 4096).
-
-        \t2. The total tokens taken up by the prompt plus those needed for an appropriate response cannot
-        \texceed the model's context length. The prompt for this file is using \(allMessages.totalTokens)
-        \ttokens, which leaves \(remainingTokens) tokens. Your file is \(fileContents.approximateTokens)
-        \ttokens.
-
-        """)
-      return
-    } else if remainingTokens < Int(Double(fileContents.approximateTokens) * commentThreshold) {
-      logger.warning(
-        """
-
-        ⚠︎ Warning: Close to token limit for \(fileURL.lastPathComponent). Please ensure that the entire file
-        was given back to you by DoccGPT.
-
-        """)
-    }
-
-    let parameters = CompletionParameters(
-      model: model,
-      messages: allMessages,
-      temperature: 0,
-      topP: 1,
-      n: 1,
-      stream: false,
-      stop: "<END>")
-
-    var request = URLRequest(url: apiURL)
-    request.httpBody = try jsonEncoder.encode(parameters)
-    request.httpMethod = "POST"
-    request.allHTTPHeaderFields = [
-      "Authorization": "Bearer \(apiKey)",
-      "Content-Type": "application/json",
-    ]
-
-    let (data, urlResponse) = try await URLSession.shared.data(for: request)
-    if let httpResponse = urlResponse as? HTTPURLResponse, httpResponse.statusCode != 200 {
-      let errorResponse = try jsonDecoder.decode(ErrorResponse.self, from: data)
-      throw DoccGPTRunnerError.openAI(errorResponse.error.message)
-    }
-
-    let completionResponse = try jsonDecoder.decode(CompletionResponse.self, from: data)
-
-    guard let firstChoice = completionResponse.choices.first else {
-      throw DoccGPTRunnerError.missingResponses
-    }
-
-    guard firstChoice.message.content.hasPrefix(expectedPrefix) else {
-      throw DoccGPTRunnerError.missingPrefix
-    }
-
-    var newContent = firstChoice.message.content
-    newContent.removeFirst(expectedPrefix.count)
-
-    let replacementDirectory = try fileManager.url(
-      for: .itemReplacementDirectory,
-      in: .userDomainMask,
-      appropriateFor: fileURL,
-      create: true)
-
-    let replacementURL = replacementDirectory.appendingPathComponent(fileURL.lastPathComponent)
-
-    try newContent.write(
-      to: replacementURL,
-      atomically: true,
-      encoding: .utf8)
-
-    _ = try fileManager.replaceItemAt(fileURL, withItemAt: replacementURL)
-
-    logger.info("✓ Finished documenting \(fileURL.lastPathComponent)")
-  }
 
   /**
    Documents files in a directory using the OpenAI GPT API.
@@ -192,12 +74,78 @@ struct DoccGPTRunner {
         }
         group.addTask {
           let fileURL = directoryURL.appendingPathComponent(file)
-          try await documentFile(fileURL: fileURL, with: messages)
+          let fileContents = try String(contentsOf: fileURL)
+          let request = try Request(
+            fewShotMessages: messages,
+            fileContents: fileContents,
+            fileURL: fileURL,
+            model: model)
+
+          try await documentFile(with: request)
         }
       }
 
       try await group.waitForAll()
     }
+  }
+
+  /**
+   Documents a single Swift file using the OpenAI GPT API.
+
+   - Parameter fileURL: The URL of the file to document.
+   - Parameter messages: The messages to use when documenting the file.
+
+   - Throws: `DoccGPTRunnerError` if an error occurs.
+   */
+  private func documentFile(with request: Request) async throws {
+    logger.info("᠅ Documenting \(request.fileURL.lastPathComponent)...")
+
+    let commentThreshold = 1.1
+    let remainingTokens = model.contextLength - request.parameters.messages.totalTokens
+    if remainingTokens <= request.fileContents.approximateTokens && skipFiles {
+      logger.warning(
+        """
+
+        ⚠︎ Skipping \(request.fileURL.lastPathComponent) due to number of tokens in prompt \
+        (\(request.parameters.messages.totalTokens)).
+
+        \tThe total tokens taken up by the prompt plus those needed for an appropriate response cannot
+        \texceed the model's context length. The prompt for this file is using \(request.parameters.messages.totalTokens)
+        \ttokens, which leaves \(remainingTokens) tokens. Your file is \(request.fileContents.approximateTokens)
+        \ttokens.
+
+        """)
+
+      return
+
+    } else if remainingTokens < Int(Double(request.fileContents.approximateTokens) * commentThreshold) {
+      logger.warning(
+        """
+
+        ⚠︎ Warning: Close to token limit for \(request.fileURL.lastPathComponent). Please ensure that the entire file
+        was given back to you by DoccGPT.
+
+        """)
+    }
+
+    let newContent = try await apiService.perform(request: request)
+
+    let replacementDirectory = try fileManager.url(
+      for: .itemReplacementDirectory,
+      in: .userDomainMask,
+      appropriateFor: request.fileURL,
+      create: true)
+
+    let replacementURL = replacementDirectory.appendingPathComponent(request.fileURL.lastPathComponent)
+
+    try newContent.write(
+      to: replacementURL,
+      atomically: true,
+      encoding: .utf8)
+
+    _ = try fileManager.replaceItemAt(request.fileURL, withItemAt: replacementURL)
+    
+    logger.info("✓ Finished documenting \(request.fileURL.lastPathComponent)")
   }
 
   /**

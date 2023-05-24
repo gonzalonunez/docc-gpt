@@ -1,3 +1,4 @@
+import ArgumentParser
 import Foundation
 
 /// A `struct` representing parameters for the completion endpoint
@@ -10,18 +11,6 @@ struct CompletionParameters: Encodable {
 
   /// What sampling temperature to use, between 0 and 2
   var temperature: Double
-
-  /// An alternative to sampling with temperature, called nucleus sampling
-  var topP: Double
-
-  /// The number of partial hypotheses to return
-  var n: Double
-
-  /// Whether to stream the results as they are generated
-  var stream: Bool
-
-  /// Whether to return the log probabilities of the generated tokens
-  var logprobs: Int?
 
   /// A string to stop the generation when it is encountered
   var stop: String
@@ -48,6 +37,11 @@ struct CompletionResponse: Decodable {
   }
 }
 
+#if DEBUG
+extension CompletionResponse: Encodable { }
+extension CompletionResponse.Choice: Encodable { }
+#endif
+
 /// A `struct` representing an error response from the completion endpoint
 struct ErrorResponse: Decodable {
   /// The error returned by the response
@@ -57,6 +51,30 @@ struct ErrorResponse: Decodable {
   struct ErrorInfo: Decodable {
     /// The message of the error
     var message: String
+  }
+}
+
+#if DEBUG
+extension ErrorResponse: Encodable { }
+extension ErrorResponse.ErrorInfo: Encodable { }
+#endif
+
+struct Model: ExpressibleByArgument {
+  let id: String
+  let contextLength: Int
+
+  init?(argument: String) {
+    self.id = argument
+    switch id {
+    case "gpt-4", "gpt-4-0314":
+      contextLength = 8192
+    case "gpt-4-32k", "gpt-4-32k-0314":
+      contextLength = 32_768
+    case "gpt-3.5-turbo", "gpt-3.5-turbo-0301":
+      contextLength = 4096
+    default:
+      return nil
+    }
   }
 }
 
