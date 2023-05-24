@@ -62,7 +62,7 @@ Run the executable and give it a directory as well as your [OpenAI secret key](h
 > DoccGPT will attempt to rewrite the contents of every single `.swift` file in the directory that you give it. And if you feed it a sufficiently long file it won't make it all the way to the end!
 
 ```bash
-swift run docc-gpt <directory> [--model <model>] [--context-length <context-length>] --key <key> [--log-level <log-level>] [--skip-files <skip-files>]
+swift run docc-gpt <directory> [--model <model>] --key <key> [--log-level <log-level>] [--skip-files <skip-files>]
 ```
 
 ```bash
@@ -70,9 +70,7 @@ ARGUMENTS:
   <directory>             The folder whose contents you want to document
 
 OPTIONS:
-  -m, --model <model>     The OpenAI model to run (default: gpt-3.5-turbo)
-  --context-length <context-length>
-                          The context length corresponding to the OpenAI model chosen (default: 4096)
+  -m, --model <model>     The id of the OpenAI model to run (default: Model(id: "gpt-3.5-turbo", contextLength: 4096))
   -k, --key <key>         Your secret API key for OpenAI
   -l, --log-level <log-level>
                           The desired log level (default: info)
@@ -97,7 +95,7 @@ The biggest issue is the context window of the currently available models. I was
 
 I also haven't figured out what to do about re-running the model on a file that has already been documented. With more complex code, models will make different decisions than the ones they had made previously. A second pass over code that has already been commented on seems to pretty consistently result in terrible changes. Perhaps most importantly, I have also not figured out how to get it to re-document code if the functionality has changed. That said, all of this can probably be fixed with better prompting or a better model.
 
-Lastly, there is quite a bit of other basic CLI work needed to take this all of the way to a usable state, like exposing the ability to ignore certain files/subdirectories. Running on large directories in-parallel can also lead to getting rate-limited––a workaround is being worked on.
+Lastly, there is quite a bit of other basic CLI work needed to take this all of the way to a usable state, like exposing the ability to ignore certain files/subdirectories.
 
 #### Would I use this in production?
 
