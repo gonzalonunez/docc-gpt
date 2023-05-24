@@ -11,7 +11,6 @@ struct DoccGPT: AsyncParsableCommand {
     let directoryURL = URL(fileURLWithPath: directory)
     let runner = DoccGPTRunner(
       apiKey: key,
-      contextLength: contextLength,
       logger: logger,
       model: model,
       skipFiles: skipFiles)
@@ -32,13 +31,9 @@ struct DoccGPT: AsyncParsableCommand {
   @Argument(help: "The folder whose contents you want to document")
   var directory: String
 
-  /// The OpenAI model to run.
-  @Option(name: .shortAndLong, help: "The OpenAI model to run")
-  var model: String = "gpt-3.5-turbo"
-
-  /// The context length corresponding to the OpenAI model chosen.
-  @Option(name: .long, help: "The context length corresponding to the OpenAI model chosen")
-  var contextLength: Int = 4096
+  /// The id of the OpenAI model to run.
+  @Option(name: .shortAndLong, help: "The id of the OpenAI model to run")
+  var model: Model = .init(argument: "gpt-3.5-turbo")!
 
   /// Your secret API key for OpenAI.
   @Option(name: .shortAndLong, help: "Your secret API key for OpenAI")
