@@ -8,8 +8,8 @@ struct Request {
     fewShotMessages: [CompletionParameters.Message],
     fileContents: String,
     fileURL: URL,
-    model: Model) throws
-  {
+    model: Model
+  ) throws {
     self.fewShotMessages = fewShotMessages
     self.fileContents = fileContents
     self.fileURL = fileURL

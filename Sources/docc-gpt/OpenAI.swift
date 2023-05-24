@@ -38,8 +38,8 @@ struct CompletionResponse: Decodable {
 }
 
 #if DEBUG
-extension CompletionResponse: Encodable { }
-extension CompletionResponse.Choice: Encodable { }
+  extension CompletionResponse: Encodable {}
+  extension CompletionResponse.Choice: Encodable {}
 #endif
 
 /// A `struct` representing an error response from the completion endpoint
@@ -55,8 +55,8 @@ struct ErrorResponse: Decodable {
 }
 
 #if DEBUG
-extension ErrorResponse: Encodable { }
-extension ErrorResponse.ErrorInfo: Encodable { }
+  extension ErrorResponse: Encodable {}
+  extension ErrorResponse.ErrorInfo: Encodable {}
 #endif
 
 struct Model: ExpressibleByArgument {

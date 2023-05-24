@@ -8,8 +8,8 @@ actor OpenAIService {
 
   init(
     apiKey: String,
-    logger: Logger)
-  {
+    logger: Logger
+  ) {
     self.apiKey = apiKey
     self.logger = logger
   }

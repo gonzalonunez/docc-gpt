@@ -8,8 +8,8 @@ struct DoccGPTRunner {
     apiKey: String,
     logger: Logger,
     model: Model,
-    skipFiles: Bool)
-  {
+    skipFiles: Bool
+  ) {
     self.apiService = OpenAIService(apiKey: apiKey, logger: logger)
     self.logger = logger
     self.model = model
@@ -144,7 +144,7 @@ struct DoccGPTRunner {
       encoding: .utf8)
 
     _ = try fileManager.replaceItemAt(request.fileURL, withItemAt: replacementURL)
-    
+
     logger.info("✓ Finished documenting \(request.fileURL.lastPathComponent)")
   }
 

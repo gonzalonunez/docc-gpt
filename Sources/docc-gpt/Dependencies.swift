@@ -8,7 +8,7 @@ private enum NetworkSessionKey: DependencyKey {
 }
 
 extension DependencyValues {
-  
+
   var networkSession: NetworkSession {
     get { self[NetworkSessionKey.self] }
     set { self[NetworkSessionKey.self] = newValue }
