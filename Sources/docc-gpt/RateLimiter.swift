@@ -11,7 +11,7 @@ actor RateLimiter {
 
   let tokenLimit = 90_000
   let requestLimit = 3_500
-  
+
   func addRequest(_ request: Request) {
     tokenCount += request.parameters.messages.totalTokens
     assert(tokenCount <= tokenLimit)

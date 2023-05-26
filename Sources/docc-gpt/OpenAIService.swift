@@ -25,7 +25,7 @@ final class OpenAIService {
     while await !canAddRequest(request) {
       try await Task.sleep(nanoseconds: 1 * 1_000_000)
     }
-    
+
     await rateLimiter.addRequest(request)
     logger.debug("Performing request for \(request.fileURL.lastPathComponent)...")
 
