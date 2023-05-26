@@ -128,7 +128,7 @@ struct DoccGPTRunner {
         """)
     }
 
-    let newContent = try await apiService.perform(request: request)
+    let newContent = try await apiService.performRequest(request)
 
     let replacementDirectory = try fileManager.url(
       for: .itemReplacementDirectory,
