@@ -4,7 +4,7 @@ import Dependencies
 import Foundation
 import Logging
 
-actor OpenAIService {
+final class OpenAIService {
 
   init(
     apiKey: String,
@@ -14,15 +14,52 @@ actor OpenAIService {
     self.logger = logger
   }
 
+  func canAddRequest(_ request: Request) async -> Bool {
+    let newTokenCount = await rateLimiter.tokenCount + request.parameters.messages.totalTokens
+    let newRequestCount = await rateLimiter.requestCount + 1
+    return newTokenCount <= rateLimiter.tokenLimit && newRequestCount <= rateLimiter.requestLimit
+  }
+
   /// Performs a `Request` and returns its response.
-  ///
-  /// Prevents getting rate-limited by the OpenAI API in a thread-safe manner.
-  func perform(request: Request) async throws -> String {
-    defer {
-      removeRequest(request)
+  func performRequest(_ request: Request) async throws -> String {
+    while await !canAddRequest(request) {
+      try await Task.sleep(nanoseconds: 1 * 1_000_000)
     }
-    await addRequest(request)
-    return try await performRequest(request)
+    
+    await rateLimiter.addRequest(request)
+    logger.debug("Performing request for \(request.fileURL.lastPathComponent)...")
+
+    var urlRequest = URLRequest(url: apiURL)
+    urlRequest.httpBody = try jsonEncoder.encode(request.parameters)
+    urlRequest.httpMethod = "POST"
+    urlRequest.allHTTPHeaderFields = [
+      "Authorization": "Bearer \(apiKey)",
+      "Content-Type": "application/json",
+    ]
+
+    let (data, urlResponse) = try await networkSession.data(for: urlRequest)
+
+    logger.debug("Received response for \(request.fileURL.lastPathComponent)...")
+    await rateLimiter.removeRequest(request)
+
+    if let httpResponse = urlResponse as? HTTPURLResponse, !(200..<300).contains(httpResponse.statusCode) {
+      let errorResponse = try jsonDecoder.decode(ErrorResponse.self, from: data)
+      throw DoccGPTRunnerError.openAI(errorResponse.error.message)
+    }
+
+    let completionResponse = try jsonDecoder.decode(CompletionResponse.self, from: data)
+
+    guard let firstChoice = completionResponse.choices.first else {
+      throw DoccGPTRunnerError.missingResponses
+    }
+
+    guard firstChoice.message.content.hasPrefix(expectedPrefix) else {
+      throw DoccGPTRunnerError.missingPrefix
+    }
+
+    var newContent = firstChoice.message.content
+    newContent.removeFirst(expectedPrefix.count)
+    return newContent
   }
 
   // MARK: Private
@@ -56,63 +93,5 @@ actor OpenAIService {
     return encoder
   }()
 
-  private var tokenCount = 0
-  private let tokenLimit = 90_000
-
-  private var requestCount = 0
-  private let requestLimit = 3_500
-
-  private func yield() async {
-    await withCheckedContinuation { continuation in
-      while tokenCount >= tokenLimit || requestCount >= requestLimit {
-        continue
-      }
-      continuation.resume()
-    }
-  }
-
-  private func addRequest(_ request: Request) async {
-    await yield()
-    tokenCount += request.parameters.messages.totalTokens
-    requestCount += 1
-    logger.debug("Token count: \(tokenCount)")
-  }
-
-  private func removeRequest(_ request: Request) {
-    tokenCount -= request.parameters.messages.totalTokens
-    requestCount -= 1
-    logger.debug("Token count: \(tokenCount)")
-  }
-
-  private func performRequest(_ request: Request) async throws -> String {
-    logger.debug("Performing request for \(request.fileURL.lastPathComponent)...")
-
-    var urlRequest = URLRequest(url: apiURL)
-    urlRequest.httpBody = try jsonEncoder.encode(request.parameters)
-    urlRequest.httpMethod = "POST"
-    urlRequest.allHTTPHeaderFields = [
-      "Authorization": "Bearer \(apiKey)",
-      "Content-Type": "application/json",
-    ]
-
-    let (data, urlResponse) = try await networkSession.data(for: urlRequest)
-    if let httpResponse = urlResponse as? HTTPURLResponse, !(200..<300).contains(httpResponse.statusCode) {
-      let errorResponse = try jsonDecoder.decode(ErrorResponse.self, from: data)
-      throw DoccGPTRunnerError.openAI(errorResponse.error.message)
-    }
-
-    let completionResponse = try jsonDecoder.decode(CompletionResponse.self, from: data)
-
-    guard let firstChoice = completionResponse.choices.first else {
-      throw DoccGPTRunnerError.missingResponses
-    }
-
-    guard firstChoice.message.content.hasPrefix(expectedPrefix) else {
-      throw DoccGPTRunnerError.missingPrefix
-    }
-
-    var newContent = firstChoice.message.content
-    newContent.removeFirst(expectedPrefix.count)
-    return newContent
-  }
+  private let rateLimiter = RateLimiter()
 }
