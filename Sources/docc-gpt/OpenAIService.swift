@@ -23,7 +23,7 @@ final class OpenAIService {
   /// Performs a `Request` and returns its response.
   func performRequest(_ request: Request) async throws -> String {
     while await !canAddRequest(request) {
-      try await Task.sleep(nanoseconds: 1 * 1_000_000)
+      try await Task.sleep(nanoseconds: NSEC_PER_SEC * 1)
     }
 
     await rateLimiter.addRequest(request)
